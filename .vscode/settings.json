@@ -4,6 +4,7 @@
         "chameleonfutureacademy",
         "classpath",
         "datasource",
+        "domainmodel",
         "dotenv",
         "factorypath",
         "fiap",
@@ -14,6 +15,7 @@
         "nbbuild",
         "nbdist",
         "nbproject",
+        "nullable",
         "ojdbc",
         "openapi",
         "orcl",
@@ -23,7 +25,8 @@
         "springdoc",
         "springframework",
         "temurin",
-        "webmvc"
+        "webmvc",
+        "whatsapp"
     ],
     "java.configuration.updateBuildConfiguration": "interactive"
 }
