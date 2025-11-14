@@ -1,0 +1,29 @@
+{
+    "java.compile.nullAnalysis.mode": "disabled",
+    "cSpell.words": [
+        "chameleonfutureacademy",
+        "classpath",
+        "datasource",
+        "dotenv",
+        "factorypath",
+        "fiap",
+        "jackson",
+        "jdbc",
+        "lombok",
+        "mockmvc",
+        "nbbuild",
+        "nbdist",
+        "nbproject",
+        "ojdbc",
+        "openapi",
+        "orcl",
+        "paulschwarz",
+        "projectlombok",
+        "restdocs",
+        "springdoc",
+        "springframework",
+        "temurin",
+        "webmvc"
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive"
+}
