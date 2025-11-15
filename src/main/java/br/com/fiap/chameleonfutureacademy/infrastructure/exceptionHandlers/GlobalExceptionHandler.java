@@ -10,8 +10,12 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    private final PropertyNamingStrategies.SnakeCaseStrategy snakeCaseStrategy = new PropertyNamingStrategies.SnakeCaseStrategy();
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -19,8 +23,12 @@ public class GlobalExceptionHandler {
             MethodArgumentNotValidException exception) {
 
         Map<String, String> errors = new HashMap<>();
-        exception.getBindingResult().getFieldErrors()
-                .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+
+        exception.getBindingResult().getFieldErrors().forEach(error -> {
+            String field = snakeCaseStrategy.translate(error.getField());
+            errors.put(field, error.getDefaultMessage());
+        });
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 

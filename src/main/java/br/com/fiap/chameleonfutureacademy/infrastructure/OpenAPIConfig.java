@@ -3,11 +3,22 @@ package br.com.fiap.chameleonfutureacademy.infrastructure;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+
+import io.swagger.v3.core.jackson.ModelResolver;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 
 @Configuration
 public class OpenAPIConfig {
+
+    @Bean
+    ModelResolver modelResolver(ObjectMapper objectMapper) {
+        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
+        return new ModelResolver(objectMapper);
+    }
+
     @Bean
     OpenAPI customOpenApi() {
         return new OpenAPI().info(
@@ -22,4 +33,5 @@ public class OpenAPIConfig {
                                 dinâmico que reflete suas habilidades e conquistas.
                                 """));
     }
+
 }
