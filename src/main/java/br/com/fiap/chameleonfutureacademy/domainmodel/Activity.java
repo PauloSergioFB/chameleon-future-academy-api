@@ -25,9 +25,9 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "cfa_activity")
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Activity {
 
     @Id

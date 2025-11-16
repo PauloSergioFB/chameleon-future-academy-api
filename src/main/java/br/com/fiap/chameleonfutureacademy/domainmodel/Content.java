@@ -18,9 +18,9 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "cfa_content")
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Content {
 
     @Id

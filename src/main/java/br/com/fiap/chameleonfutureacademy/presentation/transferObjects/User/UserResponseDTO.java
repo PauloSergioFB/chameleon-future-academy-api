@@ -1,6 +1,7 @@
 package br.com.fiap.chameleonfutureacademy.presentation.transferObjects.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.fiap.chameleonfutureacademy.domainmodel.Enrollment;
@@ -27,8 +28,12 @@ public class UserResponseDTO {
     private String whatsapp;
     private String profileImage;
     private LocalDateTime createdAt;
-    private List<Enrollment> enrollments;
-    private List<UserBadge> badges;
+
+    @Builder.Default
+    private List<Enrollment> enrollments = new ArrayList<>();
+
+    @Builder.Default
+    private List<UserBadge> badges = new ArrayList<>();
 
     public static UserResponseDTO fromEntity(User user) {
         if (user == null)
@@ -43,8 +48,8 @@ public class UserResponseDTO {
                 .whatsapp(user.getWhatsapp())
                 .profileImage(user.getProfileImage())
                 .createdAt(user.getCreatedAt())
-                .enrollments(user.getEnrollments())
-                .badges(user.getBadges())
+                .enrollments(user.getEnrollments() != null ? user.getEnrollments() : new ArrayList<>())
+                .badges(user.getBadges() != null ? user.getBadges() : new ArrayList<>())
                 .build();
     }
 
@@ -61,8 +66,8 @@ public class UserResponseDTO {
                 .whatsapp(dto.getWhatsapp())
                 .profileImage(dto.getProfileImage())
                 .createdAt(dto.getCreatedAt())
-                .enrollments(dto.getEnrollments())
-                .badges(dto.getBadges())
+                .enrollments(dto.getEnrollments() != null ? dto.getEnrollments() : new ArrayList<>())
+                .badges(dto.getBadges() != null ? dto.getBadges() : new ArrayList<>())
                 .build();
     }
 

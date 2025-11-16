@@ -20,9 +20,9 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "cfa_user_badge")
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class UserBadge {
 
     @Id

@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -58,21 +57,8 @@ public class UserApiController {
         User user = CreateUserDTO.toEntity(createUserDTO);
         user.setUserId(id);
 
-        User updatedUser = userService.create(user);
+        User updatedUser = userService.update(user);
         return ResponseEntity.ok(UserResponseDTO.fromEntity(updatedUser));
-    }
-
-    @Operation(summary = "Atualizar parcialmente um usuário", description = "Permite atualizar apenas campos específicos de um usuário existente. Os campos não informados permanecem inalterados.")
-    @PatchMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> partialUpdate(@PathVariable Long id,
-            @RequestBody CreateUserDTO createUserDTO) {
-        try {
-            User updatedUser = userService.partialUpdate(id, CreateUserDTO.toEntity(createUserDTO));
-            return ResponseEntity.ok(UserResponseDTO.fromEntity(updatedUser));
-        } catch (IllegalArgumentException e) {
-            log.error(e.getMessage(), e);
-            return ResponseEntity.notFound().build();
-        }
     }
 
     @Operation(summary = "Remover usuário", description = "Exclui permanentemente um usuário do sistema com base no ID informado.")

@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import br.com.fiap.chameleonfutureacademy.domainmodel.User;
+import br.com.fiap.chameleonfutureacademy.domainmodel.exceptions.FieldValidationException;
 import br.com.fiap.chameleonfutureacademy.domainmodel.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -21,36 +22,22 @@ public class UserServiceImpl implements UserService<User, Long> {
 
     @Override
     public User create(User user) {
+        userRepository.findByEmail(user.getEmail()).ifPresent(other -> {
+            throw new FieldValidationException("email", "Este e-mail já está em uso.");
+        });
+
         return userRepository.save(user);
     }
 
     @Override
-    public User partialUpdate(Long id, User user) {
-        if (!userRepository.existsById(id)) {
-            throw new IllegalArgumentException("Entity not found");
-        }
+    public User update(User user) {
+        userRepository.findByEmail(user.getEmail()).ifPresent(other -> {
+            if (!other.getUserId().equals(user.getUserId())) {
+                throw new FieldValidationException("email", "Este e-mail já está em uso.");
+            }
+        });
 
-        User userFromDatabase = userRepository.findById(id).orElse(null);
-
-        if (user.getFullName() != null)
-            userFromDatabase.setFullName(user.getFullName());
-
-        if (user.getEmail() != null)
-            userFromDatabase.setFullName(user.getEmail());
-
-        if (user.getHashedPassword() != null)
-            userFromDatabase.setFullName(user.getHashedPassword());
-
-        if (user.getBiography() != null)
-            userFromDatabase.setFullName(user.getBiography());
-
-        if (user.getWhatsapp() != null)
-            userFromDatabase.setFullName(user.getWhatsapp());
-
-        if (user.getProfileImage() != null)
-            userFromDatabase.setFullName(user.getProfileImage());
-
-        return create(userFromDatabase);
+        return userRepository.save(user);
     }
 
     @Override

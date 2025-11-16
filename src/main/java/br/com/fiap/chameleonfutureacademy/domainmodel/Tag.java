@@ -19,9 +19,9 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "cfa_tag")
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Tag {
 
     @Id

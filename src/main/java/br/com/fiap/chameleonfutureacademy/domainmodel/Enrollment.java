@@ -20,9 +20,9 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "cfa_enrollment")
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Enrollment {
 
     @Id

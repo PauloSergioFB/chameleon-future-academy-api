@@ -22,9 +22,9 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "cfa_user_account")
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class User {
 
     @Id
