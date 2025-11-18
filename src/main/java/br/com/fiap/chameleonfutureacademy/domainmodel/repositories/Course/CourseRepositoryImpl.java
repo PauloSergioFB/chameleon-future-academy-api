@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
@@ -38,10 +39,7 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom {
             String title,
             String author,
             String tag,
-            int page,
-            int size,
-            String orderBy,
-            String direction) {
+            Pageable pageable) {
 
         QCourse qCourse = QCourse.course;
         QTag qTag = QTag.tag;
@@ -57,19 +55,16 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom {
         if (tag != null)
             filters.and(qTag.description.equalsIgnoreCase(tag));
 
-        OrderSpecifier<?> order = buildOrder(orderBy, direction);
+        OrderSpecifier<?> order = buildOrder(pageable);
 
-        return executePagedQuery(filters, page, size, order);
+        return executePagedQuery(filters, pageable.getPageNumber(), pageable.getPageSize(), order);
     }
 
     @Override
     public Page<CourseListRow> findSearch(
             String search,
             String tag,
-            int page,
-            int size,
-            String orderBy,
-            String direction) {
+            Pageable pageable) {
 
         QCourse qCourse = QCourse.course;
         QTag qTag = QTag.tag;
@@ -89,9 +84,26 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom {
         if (tag != null)
             filters.and(qTag.description.equalsIgnoreCase(tag));
 
-        OrderSpecifier<?> order = buildOrder(orderBy, direction);
+        OrderSpecifier<?> order = buildOrder(pageable);
 
-        return executePagedQuery(filters, page, size, order);
+        return executePagedQuery(filters, pageable.getPageNumber(), pageable.getPageSize(), order);
+    }
+
+    private OrderSpecifier<?> buildOrder(Pageable pageable) {
+
+        Sort.Order sortOrder = pageable.getSort().stream()
+                .findFirst()
+                .orElse(Sort.Order.asc("courseId"));
+
+        String orderBy = sortOrder.getProperty();
+
+        Order order = sortOrder.isAscending() ? Order.ASC : Order.DESC;
+
+        PathBuilder<Course> path = new PathBuilder<>(Course.class, "course");
+
+        return new OrderSpecifier<>(
+                order,
+                path.getComparable(orderBy, Comparable.class));
     }
 
     private Page<CourseListRow> executePagedQuery(
@@ -134,16 +146,6 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom {
         Long total = countFiltered(filters);
 
         return new PageImpl<>(rows, pageable, total);
-    }
-
-    private OrderSpecifier<?> buildOrder(String orderBy, String direction) {
-        Order order = direction.equalsIgnoreCase("desc") ? Order.DESC : Order.ASC;
-
-        PathBuilder<Course> path = new PathBuilder<>(Course.class, "course");
-
-        return new OrderSpecifier<>(
-                order,
-                path.getComparable(orderBy, Comparable.class));
     }
 
     private long countFiltered(BooleanBuilder filters) {
