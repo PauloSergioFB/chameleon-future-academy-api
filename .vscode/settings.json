@@ -9,9 +9,11 @@
         "factorypath",
         "fiap",
         "jackson",
+        "jakarta",
         "jdbc",
         "lombok",
         "mockmvc",
+        "mysema",
         "nbbuild",
         "nbdist",
         "nbproject",
@@ -21,6 +23,7 @@
         "orcl",
         "paulschwarz",
         "projectlombok",
+        "querydsl",
         "restdocs",
         "springdoc",
         "springframework",
@@ -28,6 +31,5 @@
         "webmvc",
         "whatsapp"
     ],
-    "java.configuration.updateBuildConfiguration": "interactive",
-    "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx4G -Xms100m -Xlog:disable"
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

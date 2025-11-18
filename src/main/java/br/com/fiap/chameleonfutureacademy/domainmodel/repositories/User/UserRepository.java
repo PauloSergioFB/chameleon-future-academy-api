@@ -1,4 +1,4 @@
-package br.com.fiap.chameleonfutureacademy.domainmodel.repositories;
+package br.com.fiap.chameleonfutureacademy.domainmodel.repositories.User;
 
 import java.util.Optional;
 

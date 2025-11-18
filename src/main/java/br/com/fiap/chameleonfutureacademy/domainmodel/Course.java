@@ -61,11 +61,11 @@ public class Course {
     private @Getter @Setter Set<Tag> tags;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @OrderBy("position ASC")
-    private @Getter List<Content> contents;
+    private @Getter List<Badge> badges;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private @Getter List<Badge> badges;
+    @OrderBy("position ASC")
+    private @Getter List<Content> contents;
 
     @PrePersist
     public void prePersist() {

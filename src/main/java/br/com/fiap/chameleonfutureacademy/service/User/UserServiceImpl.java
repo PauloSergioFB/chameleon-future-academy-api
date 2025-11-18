@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.fiap.chameleonfutureacademy.domainmodel.User;
 import br.com.fiap.chameleonfutureacademy.domainmodel.exceptions.FieldValidationException;
-import br.com.fiap.chameleonfutureacademy.domainmodel.repositories.UserRepository;
+import br.com.fiap.chameleonfutureacademy.domainmodel.repositories.User.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
