@@ -28,9 +28,9 @@ public class OpenAPIConfig {
                         .description("""
                                 A Chameleon Future Academy é uma plataforma de desenvolvimento educacional
                                 voltada para capacitar profissionais para os desafios do futuro.
-                                O sistema permite que usuários explorem trilhas de aprendizagem, realizem cursos,
-                                acompanhem seu progresso, obtenham badges e construam um perfil acadêmico
-                                dinâmico que reflete suas habilidades e conquistas.
+                                O sistema permite que usuários realizem cursos, acompanhem seu progresso,
+                                obtenham badges e construam um perfil acadêmico dinâmico que reflete suas
+                                habilidades e conquistas.
                                 """));
     }
 
