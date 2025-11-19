@@ -19,7 +19,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import br.com.fiap.chameleonfutureacademy.domainmodel.Course;
 import br.com.fiap.chameleonfutureacademy.domainmodel.QCourse;
 import br.com.fiap.chameleonfutureacademy.domainmodel.QTag;
-import br.com.fiap.chameleonfutureacademy.infrastructure.queries.Course.CourseListRow;
+import br.com.fiap.chameleonfutureacademy.infrastructure.queries.Course.CourseTagRow;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
@@ -35,7 +35,7 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom {
     }
 
     @Override
-    public Page<CourseListRow> findFiltered(
+    public Page<CourseTagRow> findFiltered(
             String title,
             String author,
             String tag,
@@ -61,7 +61,7 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom {
     }
 
     @Override
-    public Page<CourseListRow> findSearch(
+    public Page<CourseTagRow> findSearch(
             String search,
             String tag,
             Pageable pageable) {
@@ -106,7 +106,7 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom {
                 path.getComparable(orderBy, Comparable.class));
     }
 
-    private Page<CourseListRow> executePagedQuery(
+    private Page<CourseTagRow> executePagedQuery(
             BooleanBuilder filters,
             int page,
             int size,
@@ -128,14 +128,15 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom {
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        List<CourseListRow> rows = queryFactory
+        List<CourseTagRow> rows = queryFactory
                 .select(Projections.constructor(
-                        CourseListRow.class,
+                        CourseTagRow.class,
                         qCourse.courseId,
                         qCourse.title,
                         qCourse.author,
                         qCourse.thumbnailUrl,
                         qCourse.createdAt,
+                        qTag.tagId,
                         qTag.description))
                 .from(qCourse)
                 .leftJoin(qCourse.tags, qTag)

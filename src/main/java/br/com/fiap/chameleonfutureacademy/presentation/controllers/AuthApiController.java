@@ -16,9 +16,9 @@ import org.springframework.web.server.ResponseStatusException;
 import br.com.fiap.chameleonfutureacademy.domainmodel.User;
 import br.com.fiap.chameleonfutureacademy.infrastructure.config.JwtUserData;
 import br.com.fiap.chameleonfutureacademy.infrastructure.utils.JwtHelper;
-import br.com.fiap.chameleonfutureacademy.presentation.transferObjects.Auth.AuthRequest;
-import br.com.fiap.chameleonfutureacademy.presentation.transferObjects.Auth.AuthResponse;
-import br.com.fiap.chameleonfutureacademy.presentation.transferObjects.Auth.RefreshTokenRequest;
+import br.com.fiap.chameleonfutureacademy.presentation.transferObjects.Auth.AuthRequestDTO;
+import br.com.fiap.chameleonfutureacademy.presentation.transferObjects.Auth.AuthResponseDTO;
+import br.com.fiap.chameleonfutureacademy.presentation.transferObjects.Auth.RefreshTokenRequestDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -37,23 +37,23 @@ public class AuthApiController {
 
     @Operation(summary = "Login", description = "Autentica usuário e retorna access token + refresh token.")
     @PostMapping
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest request) {
+    public ResponseEntity<AuthResponseDTO> login(@Valid @RequestBody AuthRequestDTO request) {
 
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.email(), request.password()));
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
         User user = (User) authentication.getPrincipal();
         String token = jwtHelper.generateToken(user);
         String refreshToken = jwtHelper.generateRefreshToken(user);
 
-        return ResponseEntity.ok(new AuthResponse(token, refreshToken));
+        return ResponseEntity.ok(new AuthResponseDTO(token, refreshToken));
     }
 
     @Operation(summary = "Renovar Token", description = "Gera novos tokens a partir de um refresh token válido.")
     @PostMapping("/refresh")
-    public ResponseEntity<AuthResponse> login(@RequestBody RefreshTokenRequest request) {
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody RefreshTokenRequestDTO request) {
 
-        Optional<JwtUserData> jwtData = jwtHelper.validateToken(request.refreshToken());
+        Optional<JwtUserData> jwtData = jwtHelper.validateToken(request.getRefreshToken());
 
         if (jwtData.isPresent()) {
             JwtUserData data = jwtData.get();
@@ -65,7 +65,7 @@ public class AuthApiController {
             String newToken = jwtHelper.generateToken(user);
             String newRefreshToken = jwtHelper.generateRefreshToken(user);
 
-            return ResponseEntity.ok(new AuthResponse(newToken, newRefreshToken));
+            return ResponseEntity.ok(new AuthResponseDTO(newToken, newRefreshToken));
         }
 
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh Token inválido ou expirado");

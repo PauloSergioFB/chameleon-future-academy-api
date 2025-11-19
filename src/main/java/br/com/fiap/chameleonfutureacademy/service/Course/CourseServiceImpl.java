@@ -1,11 +1,8 @@
 package br.com.fiap.chameleonfutureacademy.service.Course;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,9 +17,9 @@ import org.springframework.stereotype.Service;
 
 import br.com.fiap.chameleonfutureacademy.domainmodel.Course;
 import br.com.fiap.chameleonfutureacademy.domainmodel.repositories.Course.CourseRepository;
-import br.com.fiap.chameleonfutureacademy.infrastructure.queries.Course.CourseListRow;
+import br.com.fiap.chameleonfutureacademy.infrastructure.queries.Course.CourseTagRow;
 import br.com.fiap.chameleonfutureacademy.infrastructure.utils.CaseConverter;
-import br.com.fiap.chameleonfutureacademy.presentation.transferObjects.Course.ShortCourseResponseDTO;
+import br.com.fiap.chameleonfutureacademy.presentation.transferObjects.Course.CourseResponseDTO;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -36,7 +33,7 @@ public class CourseServiceImpl implements CourseService<Course, Long> {
             .collect(Collectors.toSet());
 
     @Override
-    public Page<ShortCourseResponseDTO> findAllFiltered(
+    public Page<CourseResponseDTO> findAllFiltered(
             String title,
             String author,
             String tag,
@@ -61,14 +58,14 @@ public class CourseServiceImpl implements CourseService<Course, Long> {
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<CourseListRow> rowsPage = courseRepository.findFiltered(title, author, tag, pageable);
-        List<ShortCourseResponseDTO> dtoList = convertRowsToDTO(rowsPage.getContent());
+        Page<CourseTagRow> rowsPage = courseRepository.findFiltered(title, author, tag, pageable);
+        List<CourseResponseDTO> dtoList = CourseResponseDTO.from(rowsPage.getContent());
 
         return new PageImpl<>(dtoList, rowsPage.getPageable(), rowsPage.getTotalElements());
     }
 
     @Override
-    public Page<ShortCourseResponseDTO> findAllSearch(
+    public Page<CourseResponseDTO> findAllSearch(
             String search,
             String tag,
             int page,
@@ -92,8 +89,8 @@ public class CourseServiceImpl implements CourseService<Course, Long> {
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<CourseListRow> rowsPage = courseRepository.findSearch(search, tag, pageable);
-        List<ShortCourseResponseDTO> dtoList = convertRowsToDTO(rowsPage.getContent());
+        Page<CourseTagRow> rowsPage = courseRepository.findSearch(search, tag, pageable);
+        List<CourseResponseDTO> dtoList = CourseResponseDTO.from(rowsPage.getContent());
 
         return new PageImpl<>(dtoList, rowsPage.getPageable(), rowsPage.getTotalElements());
     }
@@ -101,22 +98,6 @@ public class CourseServiceImpl implements CourseService<Course, Long> {
     @Override
     public Optional<Course> findById(Long id) {
         return courseRepository.findById(id);
-    }
-
-    private List<ShortCourseResponseDTO> convertRowsToDTO(List<CourseListRow> rows) {
-        Map<Long, ShortCourseResponseDTO> dtoMap = new LinkedHashMap<>();
-
-        for (CourseListRow row : rows) {
-            ShortCourseResponseDTO dto = dtoMap.computeIfAbsent(
-                    row.courseId(),
-                    id -> ShortCourseResponseDTO.fromRow(row));
-
-            if (row.tagDescription() != null) {
-                dto.getTags().add(row.tagDescription());
-            }
-        }
-
-        return new ArrayList<>(dtoMap.values());
     }
 
 }

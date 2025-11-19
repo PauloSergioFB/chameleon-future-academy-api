@@ -50,7 +50,7 @@ public class TagServiceImpl implements TagService<Tag, Long> {
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        return tagRepository.findAll(pageable).map(TagResponseDTO::fromEntity);
+        return tagRepository.findAll(pageable).map(TagResponseDTO::from);
     }
 
 }

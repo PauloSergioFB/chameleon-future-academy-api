@@ -16,7 +16,7 @@ public class CreateUserDTO {
 
     @NotBlank(message = "O nome do usuário não pode estar em branco")
     @Size(max = 100, message = "O nome do usuário deve ter no máximo 100 caracteres")
-    private String name;
+    private String fullName;
 
     @NotBlank(message = "O e-mail não pode estar em branco")
     @Email(message = "O e-mail deve ser válido")
@@ -37,26 +37,12 @@ public class CreateUserDTO {
     @Size(max = 100, message = "A URL da foto de perfil deve ter no máximo 100 caracteres")
     private String profileImage;
 
-    public static CreateUserDTO fromEntity(User user) {
-        if (user == null)
-            return null;
-
-        return CreateUserDTO.builder()
-                .name(user.getFullName())
-                .email(user.getEmail())
-                .password(user.getHashedPassword())
-                .biography(user.getBiography())
-                .whatsapp(user.getWhatsapp())
-                .profileImage(user.getProfileImage())
-                .build();
-    }
-
-    public static User toEntity(CreateUserDTO dto) {
+    public static User to(CreateUserDTO dto) {
         if (dto == null)
             return null;
 
         return User.builder()
-                .fullName(dto.getName())
+                .fullName(dto.getFullName())
                 .email(dto.getEmail())
                 .hashedPassword(dto.getPassword())
                 .biography(dto.getBiography())

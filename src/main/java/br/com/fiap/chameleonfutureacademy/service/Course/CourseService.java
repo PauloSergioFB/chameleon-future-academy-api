@@ -5,15 +5,15 @@ import java.util.Optional;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 
-import br.com.fiap.chameleonfutureacademy.presentation.transferObjects.Course.ShortCourseResponseDTO;
+import br.com.fiap.chameleonfutureacademy.presentation.transferObjects.Course.CourseResponseDTO;
 
 public interface CourseService<T, ID> {
 
-    public Page<ShortCourseResponseDTO> findAllFiltered(
+    public Page<CourseResponseDTO> findAllFiltered(
             String title, String author, String tag, int page, int size, String orderBy, String direction)
             throws BadRequestException;
 
-    public Page<ShortCourseResponseDTO> findAllSearch(
+    public Page<CourseResponseDTO> findAllSearch(
             String search, String tag, int page, int size, String orderBy, String direction)
             throws BadRequestException;
 
