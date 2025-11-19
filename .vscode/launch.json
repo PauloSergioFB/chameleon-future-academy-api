@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ChameleonFutureAcademyApplication<chameleon-future-academy>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "br.com.fiap.chameleonfutureacademy.ChameleonFutureAcademyApplication",
+            "projectName": "chameleon-future-academy",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

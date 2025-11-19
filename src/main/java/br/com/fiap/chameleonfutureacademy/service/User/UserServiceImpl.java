@@ -2,6 +2,7 @@ package br.com.fiap.chameleonfutureacademy.service.User;
 
 import java.util.Optional;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.fiap.chameleonfutureacademy.domainmodel.User;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class UserServiceImpl implements UserService<User, Long> {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Optional<User> findById(Long id) {
@@ -25,6 +27,8 @@ public class UserServiceImpl implements UserService<User, Long> {
         userRepository.findByEmail(user.getEmail()).ifPresent(other -> {
             throw new FieldValidationException("email", "Este e-mail já está em uso.");
         });
+
+        user.setHashedPassword(passwordEncoder.encode(user.getHashedPassword()));
 
         return userRepository.save(user);
     }

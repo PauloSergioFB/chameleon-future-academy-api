@@ -41,7 +41,6 @@ public class UserApiController {
     @Operation(summary = "Cadastrar novo usuário", description = "Cria um novo registro de usuário no sistema com os dados informados.")
     @PostMapping
     public ResponseEntity<UserResponseDTO> save(@Valid @RequestBody CreateUserDTO createUserDTO) {
-        System.out.println(createUserDTO.getName());
         User newUser = userService.create(CreateUserDTO.toEntity(createUserDTO));
         return new ResponseEntity<>(UserResponseDTO.fromEntity(newUser), HttpStatus.CREATED);
     }
