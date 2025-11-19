@@ -1,5 +1,6 @@
 package br.com.fiap.chameleonfutureacademy.service.User;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,8 @@ import org.springframework.web.server.ResponseStatusException;
 import br.com.fiap.chameleonfutureacademy.domainmodel.User;
 import br.com.fiap.chameleonfutureacademy.domainmodel.exceptions.FieldValidationException;
 import br.com.fiap.chameleonfutureacademy.domainmodel.repositories.User.UserRepository;
+import br.com.fiap.chameleonfutureacademy.infrastructure.queries.User.UserProfileRow;
+import br.com.fiap.chameleonfutureacademy.presentation.transferObjects.User.UserProfileResponseDTO;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -22,6 +25,12 @@ public class UserServiceImpl implements UserService<User, Long> {
     @Override
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
+    }
+
+    @Override
+    public Optional<UserProfileResponseDTO> findProfileById(Long id) {
+        List<UserProfileRow> rows = userRepository.findProfile(id);
+        return Optional.ofNullable(UserProfileResponseDTO.from(rows));
     }
 
     @Override
