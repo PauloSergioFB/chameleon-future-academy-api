@@ -49,7 +49,7 @@ public class UserApiController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "", description = "")
+    @Operation(summary = "Listar cursos inscritos", description = "Retorna todos os cursos nos quais o usuário autenticado está inscrito, incluindo informações como progresso, status e datas de início e conclusão.")
     @GetMapping("/me/enrollments")
     public ResponseEntity<List<EnrollmentResponseDTO>> findEnrollments(
             @AuthenticationPrincipal JwtUserData authUser) {
@@ -60,7 +60,7 @@ public class UserApiController {
                 .toList());
     }
 
-    @Operation(summary = "", description = "")
+    @Operation(summary = "Listar badges do usuário", description = "Retorna todas as badges conquistadas pelo usuário autenticado, incluindo título, ícone e informações de associação com cursos.")
     @GetMapping("/me/badges")
     public ResponseEntity<List<BadgeResponseDTO>> findBadges(@AuthenticationPrincipal JwtUserData authUser) {
         return userService.findById(authUser.userId())
@@ -68,7 +68,7 @@ public class UserApiController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "", description = "")
+    @Operation(summary = "Obter perfil completo do usuário", description = "Retorna o perfil completo do usuário autenticado, incluindo dados pessoais, cursos inscritos, badges conquistadas e demais informações associadas ao seu progresso na plataforma.")
     @GetMapping("/me/profile")
     public ResponseEntity<UserProfileResponseDTO> findProfile(@AuthenticationPrincipal JwtUserData authUser) {
         return userService.findProfileById(authUser.userId())

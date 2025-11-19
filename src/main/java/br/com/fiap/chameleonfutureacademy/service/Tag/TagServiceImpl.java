@@ -2,6 +2,7 @@ package br.com.fiap.chameleonfutureacademy.service.Tag;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -51,6 +52,11 @@ public class TagServiceImpl implements TagService<Tag, Long> {
         Pageable pageable = PageRequest.of(page, size, sort);
 
         return tagRepository.findAll(pageable).map(TagResponseDTO::from);
+    }
+
+    @Override
+    public List<Tag> findByCourseId(Long courseId) {
+        return tagRepository.findByCoursesCourseId(courseId);
     }
 
 }

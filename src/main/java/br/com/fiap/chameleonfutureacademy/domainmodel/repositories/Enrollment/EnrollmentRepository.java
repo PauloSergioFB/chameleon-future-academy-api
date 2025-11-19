@@ -8,6 +8,6 @@ import br.com.fiap.chameleonfutureacademy.domainmodel.Enrollment;
 
 public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
 
-    List<Enrollment> findByUserUserId(Long userId);
+    public List<Enrollment> findByUserUserId(Long userId);
 
 }

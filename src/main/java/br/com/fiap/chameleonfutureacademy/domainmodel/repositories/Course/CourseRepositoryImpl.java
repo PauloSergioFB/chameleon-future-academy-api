@@ -17,9 +17,12 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import br.com.fiap.chameleonfutureacademy.domainmodel.Course;
+import br.com.fiap.chameleonfutureacademy.domainmodel.QBadge;
+import br.com.fiap.chameleonfutureacademy.domainmodel.QContent;
 import br.com.fiap.chameleonfutureacademy.domainmodel.QCourse;
 import br.com.fiap.chameleonfutureacademy.domainmodel.QTag;
 import br.com.fiap.chameleonfutureacademy.infrastructure.queries.Course.CourseTagRow;
+import br.com.fiap.chameleonfutureacademy.infrastructure.queries.Course.DetailedCourseRow;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
@@ -87,6 +90,44 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom {
         OrderSpecifier<?> order = buildOrder(pageable);
 
         return executePagedQuery(filters, pageable.getPageNumber(), pageable.getPageSize(), order);
+    }
+
+    @Override
+    public List<DetailedCourseRow> findDetailedCourse(Long courseId) {
+
+        QCourse qCourse = QCourse.course;
+        QTag qTag = QTag.tag;
+        QBadge qBadge = QBadge.badge;
+        QContent qContent = QContent.content;
+
+        List<DetailedCourseRow> rows = queryFactory
+                .select(Projections.constructor(
+                        DetailedCourseRow.class,
+                        qCourse.courseId,
+                        qCourse.title,
+                        qCourse.description,
+                        qCourse.author,
+                        qCourse.thumbnailUrl,
+                        qCourse.createdAt,
+
+                        qTag.tagId,
+                        qTag.description,
+
+                        qBadge.badgeId,
+                        qBadge.title,
+                        qBadge.iconUrl,
+
+                        qContent.contentId,
+                        qContent.type,
+                        qContent.position))
+                .from(qCourse)
+                .leftJoin(qCourse.tags, qTag)
+                .leftJoin(qCourse.badges, qBadge)
+                .leftJoin(qCourse.contents, qContent)
+                .where(qCourse.courseId.eq(courseId))
+                .fetch();
+
+        return rows;
     }
 
     private OrderSpecifier<?> buildOrder(Pageable pageable) {

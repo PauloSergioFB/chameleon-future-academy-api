@@ -6,6 +6,6 @@ import br.com.fiap.chameleonfutureacademy.infrastructure.queries.User.UserProfil
 
 public interface UserRepositoryCustom {
 
-    List<UserProfileRow> findProfile(Long userId);
+    public List<UserProfileRow> findProfile(Long userId);
 
 }

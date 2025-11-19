@@ -18,8 +18,10 @@ import org.springframework.stereotype.Service;
 import br.com.fiap.chameleonfutureacademy.domainmodel.Course;
 import br.com.fiap.chameleonfutureacademy.domainmodel.repositories.Course.CourseRepository;
 import br.com.fiap.chameleonfutureacademy.infrastructure.queries.Course.CourseTagRow;
+import br.com.fiap.chameleonfutureacademy.infrastructure.queries.Course.DetailedCourseRow;
 import br.com.fiap.chameleonfutureacademy.infrastructure.utils.CaseConverter;
 import br.com.fiap.chameleonfutureacademy.presentation.transferObjects.Course.CourseResponseDTO;
+import br.com.fiap.chameleonfutureacademy.presentation.transferObjects.Course.DetailedCourseResponseDTO;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -93,6 +95,12 @@ public class CourseServiceImpl implements CourseService<Course, Long> {
         List<CourseResponseDTO> dtoList = CourseResponseDTO.from(rowsPage.getContent());
 
         return new PageImpl<>(dtoList, rowsPage.getPageable(), rowsPage.getTotalElements());
+    }
+
+    @Override
+    public Optional<DetailedCourseResponseDTO> findDetailedCourseById(Long id) {
+        List<DetailedCourseRow> rows = courseRepository.findDetailedCourse(id);
+        return Optional.ofNullable(DetailedCourseResponseDTO.from(rows));
     }
 
     @Override

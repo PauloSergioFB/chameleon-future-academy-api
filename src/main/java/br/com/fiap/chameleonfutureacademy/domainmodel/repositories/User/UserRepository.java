@@ -8,6 +8,6 @@ import br.com.fiap.chameleonfutureacademy.domainmodel.User;
 
 public interface UserRepository extends JpaRepository<User, Long>, UserRepositoryCustom {
 
-    Optional<User> findByEmail(String email);
+    public Optional<User> findByEmail(String email);
 
 }
