@@ -1,11 +1,19 @@
 package br.com.fiap.chameleonfutureacademy.service.Enrollment;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import br.com.fiap.chameleonfutureacademy.domainmodel.Enrollment;
+import br.com.fiap.chameleonfutureacademy.domainmodel.UserBadge;
+import br.com.fiap.chameleonfutureacademy.domainmodel.repositories.Course.CourseRepository;
 import br.com.fiap.chameleonfutureacademy.domainmodel.repositories.Enrollment.EnrollmentRepository;
+import br.com.fiap.chameleonfutureacademy.domainmodel.repositories.User.UserRepository;
+import br.com.fiap.chameleonfutureacademy.domainmodel.repositories.UserBadge.UserBadgeRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -13,10 +21,69 @@ import lombok.RequiredArgsConstructor;
 public class EnrollmentServiceImpl implements EnrollmentService<Enrollment, Long> {
 
     private final EnrollmentRepository enrollmentRepository;
+    private final UserRepository userRepository;
+    private final CourseRepository courseRepository;
+    private final UserBadgeRepository userBadgeRepository;
+
+    @Override
+    public Optional<Enrollment> findById(Long id) {
+        return enrollmentRepository.findById(id);
+    }
 
     @Override
     public List<Enrollment> findByUserId(Long userId) {
         return enrollmentRepository.findByUserUserId(userId);
+    }
+
+    @Override
+    public Enrollment create(Enrollment enrollment) {
+        if (!userRepository.existsById(enrollment.getUser().getUserId())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado");
+        }
+
+        if (!courseRepository.existsById(enrollment.getCourse().getCourseId())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Curso não encontrado");
+        }
+
+        return enrollmentRepository.save(enrollment);
+    }
+
+    @Override
+    public Enrollment update(Enrollment enrollment) {
+        if (!existsById(enrollment.getEnrollmentId()))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Matrícula não encontrada");
+
+        if (enrollment.getProgress() >= enrollment.getCourse().getContents().size()) {
+            enrollment.setStatus("completed");
+            enrollment.setCompletedAt(LocalDateTime.now());
+
+            enrollment.getCourse().getBadges().forEach(badge -> {
+                boolean hasBadge = enrollment.getUser().getBadges().stream()
+                        .anyMatch(ub -> ub.getBadge().getBadgeId().equals(badge.getBadgeId()));
+
+                if (!hasBadge) {
+                    userBadgeRepository.save(UserBadge.builder()
+                            .user(enrollment.getUser())
+                            .badge(badge)
+                            .build());
+                }
+            });
+        }
+
+        return enrollmentRepository.save(enrollment);
+    }
+
+    @Override
+    public void removeById(Long id) {
+        if (!existsById(id))
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Matrícula não encontrada");
+
+        enrollmentRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return enrollmentRepository.existsById(id);
     }
 
 }

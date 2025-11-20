@@ -106,7 +106,7 @@ public class UserApiController {
     public ResponseEntity<Void> deleteById(@PathVariable Long id, @AuthenticationPrincipal JwtUserData authUser) {
         if (!id.equals(authUser.userId()))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
-                    "Você só pode alterar o seu próprio usuário.");
+                    "Você só pode remover o seu próprio usuário.");
 
         userService.removeById(id);
         return ResponseEntity.noContent().build();
