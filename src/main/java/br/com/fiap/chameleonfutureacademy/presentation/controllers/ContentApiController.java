@@ -29,18 +29,18 @@ public class ContentApiController {
 
     @Operation(summary = "Obter aula de um conteúdo", description = "Retorna a aula associada ao conteúdo identificado pelo ID.")
     @GetMapping("/{id}/lesson")
-    public ResponseEntity<LessonResponseDTO> findLesson(@PathVariable Long contentId) {
+    public ResponseEntity<LessonResponseDTO> findLesson(@PathVariable Long id) {
 
-        return lessonService.findByContentId(contentId)
+        return lessonService.findByContentId(id)
                 .map(lesson -> ResponseEntity.ok(LessonResponseDTO.from(lesson)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @Operation(summary = "Obter atividade de um conteúdo", description = "Retorna a atividade associada ao conteúdo identificado pelo ID.")
     @GetMapping("/{id}/activity")
-    public ResponseEntity<ActivityResponseDTO> findActivity(@PathVariable Long contentId) {
+    public ResponseEntity<ActivityResponseDTO> findActivity(@PathVariable Long id) {
 
-        return activityService.findByContentId(contentId)
+        return activityService.findByContentId(id)
                 .map(activity -> ResponseEntity.ok(ActivityResponseDTO.from(activity)))
                 .orElse(ResponseEntity.notFound().build());
     }

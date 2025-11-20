@@ -46,25 +46,40 @@ public class EnrollmentServiceImpl implements EnrollmentService<Enrollment, Long
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Curso não encontrado");
         }
 
+        if (enrollmentRepository.existsByUserUserIdAndCourseCourseId(
+                enrollment.getUser().getUserId(), enrollment.getCourse().getCourseId())) {
+
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já inscrito neste curso");
+        }
+
+        enrollment.setProgress(0);
+
         return enrollmentRepository.save(enrollment);
     }
 
     @Override
     public Enrollment update(Enrollment enrollment) {
-        if (!existsById(enrollment.getEnrollmentId()))
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Matrícula não encontrada");
+        Enrollment existing = enrollmentRepository.findById(enrollment.getEnrollmentId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Matrícula não encontrada"));
 
-        int totalContents = Optional.ofNullable(enrollment.getCourse().getContents())
+        enrollment.setUser(existing.getUser());
+        enrollment.setCourse(existing.getCourse());
+
+        int totalContents = Optional.ofNullable(existing.getCourse().getContents())
                 .map(List::size)
                 .orElse(0);
 
-        if (enrollment.getProgress() >= totalContents) {
+        System.out.println(totalContents);
+
+        if (totalContents > 0 && enrollment.getProgress() >= totalContents) {
+
             enrollment.setStatus("completed");
             enrollment.setCompletedAt(LocalDateTime.now());
 
             List<Badge> courseBadges = enrollment.getCourse().getBadges();
 
             if (courseBadges != null) {
+
                 courseBadges.forEach(badge -> {
                     boolean hasBadge = enrollment.getUser().getBadges() != null &&
                             enrollment.getUser().getBadges().stream()

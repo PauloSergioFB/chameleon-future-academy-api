@@ -28,7 +28,6 @@ public class CreateEnrollmentDTO {
     @Min(value = 0, message = "O progresso não pode ser negativo")
     private Integer progress;
 
-    @NotNull(message = "O status não pode estar em branco")
     @Size(max = 15, message = "O status deve ter no máximo 15 caracteres")
     @Pattern(regexp = "^(in progress|completed|suspended)$", message = "O status deve ser 'in progress', 'completed' ou 'suspended'")
     private String status;
@@ -41,7 +40,7 @@ public class CreateEnrollmentDTO {
                 .user(User.builder().userId(dto.getUserId()).build())
                 .course(Course.builder().courseId(dto.getCourseId()).build())
                 .progress(dto.getProgress() != null ? dto.getProgress() : 0)
-                .status(dto.getStatus())
+                .status(dto.getStatus() != null ? dto.getStatus() : "in progress")
                 .build();
     }
 
