@@ -1,0 +1,174 @@
+## Variáveis
+@jwt_token = <seu_jwt_token>
+@refresh_token = <seu_refresh_token>
+
+### Login
+POST http://localhost:8080/api/v1/auth
+Content-Type: application/json
+
+{
+  "email": "joao.andrade@example.com",
+  "password": "SenhaForte123!"
+}
+
+###
+
+### Refresh Token
+POST http://localhost:8080/api/v1/auth/refresh
+Content-Type: application/json
+
+{
+  "refresh_token": "{{refresh_token}}"
+}
+
+---
+
+## USERS
+
+### Criar um novo usuário
+POST http://localhost:8080/api/v1/users
+Content-Type: application/json
+
+{
+  "full_name": "Usuário de exemplo",
+  "email": "example@email.com",
+  "password": "123456"
+}
+
+###
+
+### Atualizar usuário
+PUT http://localhost:8080/api/v1/users/{{id}}
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "full_name": "Usuário de exemplo atualizado",
+  "email": "example@email.com",
+  "password": "654321"
+}
+
+###
+
+### Remover usuário por ID
+DELETE http://localhost:8080/api/v1/users/{{id}}
+Authorization: Bearer {{jwt_token}}
+
+###
+
+### Ver dados do usuário logado
+GET http://localhost:8080/api/v1/users/me
+Authorization: Bearer {{jwt_token}}
+
+###
+
+### Matrículas do usuário logado
+GET http://localhost:8080/api/v1/users/me/enrollments
+Authorization: Bearer {{jwt_token}}
+
+###
+
+### Badges do usuário logado
+GET http://localhost:8080/api/v1/users/me/badges
+Authorization: Bearer {{jwt_token}}
+
+###
+
+### Perfil completo do usuário
+GET http://localhost:8080/api/v1/users/me/profile
+Authorization: Bearer {{jwt_token}}
+
+---
+
+## COURSES
+
+### Listagem de cursos com paginação
+GET http://localhost:8080/api/v1/courses?page=0&size=10
+Authorization: Bearer {{jwt_token}}
+
+###
+
+### Pesquisa de cursos
+GET http://localhost:8080/api/v1/courses/search?query=programação
+Authorization: Bearer {{jwt_token}}
+
+###
+
+### Badges de um curso
+GET http://localhost:8080/api/v1/courses/1/badges
+Authorization: Bearer {{jwt_token}}
+
+###
+
+### Tags de um curso
+GET http://localhost:8080/api/v1/courses/1/tags
+Authorization: Bearer {{jwt_token}}
+
+###
+
+### Conteúdos de um curso
+GET http://localhost:8080/api/v1/courses/1/contents
+Authorization: Bearer {{jwt_token}}
+
+###
+
+### Informações completas de um curso
+GET http://localhost:8080/api/v1/courses/1/details
+Authorization: Bearer {{jwt_token}}
+
+---
+
+## ENROLLMENTS
+
+### Matricular usuário
+POST http://localhost:8080/api/v1/enrollments
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "user_id": 1,
+  "course_id": 6,
+  "status": "in progress"
+}
+
+###
+
+### Atualizar matrícula por ID
+PUT http://localhost:8080/api/v1/enrollments/{{id}}
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "user_id": 1,
+  "course_id": 6,
+  "progress": 1,
+  "status": "in progress"
+}
+
+###
+
+### Remover matrícula
+DELETE http://localhost:8080/api/v1/enrollments/{{id}}
+Authorization: Bearer {{jwt_token}}
+
+---
+
+## TAGS
+
+### Listar todas as tags
+GET http://localhost:8080/api/v1/tags
+Authorization: Bearer {{jwt_token}}
+
+---
+
+## CONTENTS
+
+### Buscar aula por content_id
+GET http://localhost:8080/api/v1/contents/1/lesson
+Authorization: Bearer {{jwt_token}}
+
+###
+
+### Buscar atividade por content_id
+GET http://localhost:8080/api/v1/contents/3/activity
+Authorization: Bearer {{jwt_token}}

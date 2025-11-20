@@ -166,12 +166,12 @@ git clone https://github.com/paulosergiofb/chameleon-future-academy-api.git
 cd chameleon-future-academy-api
 
 # Instalar as dependências
-mvn install
+mvn compile
 ```
 
 #### 2. Configurar o Ambiente
 
-Crie um arquivo .env na raiz do projeto com o seguinte conteúdo (substitua pelos suas próprias credenciais e configurações???):
+Crie um arquivo .env na raiz do projeto com o seguinte conteúdo (substitua pelas suas próprias credenciais e configurações):
 
 ```bash
 DB_URL=<jdbc_url_do_banco>
@@ -205,14 +205,11 @@ git clone https://github.com/paulosergiofb/chameleon-future-academy-api.git
 
 # Acessar o diretório
 cd chameleon-future-academy-api
-
-# Instalar as dependências
-mvn install
 ```
 
 #### 2. Configurar o Ambiente
 
-Crie um arquivo .env na raiz do projeto com o seguinte conteúdo (substitua pelos suas próprias credenciais e configurações???):
+Crie um arquivo .env na raiz do projeto com o seguinte conteúdo (substitua pelos suas próprias credenciais e configurações):
 
 ```bash
 DB_URL=<jdbc_url_do_banco>
