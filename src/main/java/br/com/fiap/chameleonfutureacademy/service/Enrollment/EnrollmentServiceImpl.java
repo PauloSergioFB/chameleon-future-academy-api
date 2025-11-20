@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import br.com.fiap.chameleonfutureacademy.domainmodel.Badge;
 import br.com.fiap.chameleonfutureacademy.domainmodel.Enrollment;
 import br.com.fiap.chameleonfutureacademy.domainmodel.UserBadge;
 import br.com.fiap.chameleonfutureacademy.domainmodel.repositories.Course.CourseRepository;
@@ -53,21 +54,30 @@ public class EnrollmentServiceImpl implements EnrollmentService<Enrollment, Long
         if (!existsById(enrollment.getEnrollmentId()))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Matrícula não encontrada");
 
-        if (enrollment.getProgress() >= enrollment.getCourse().getContents().size()) {
+        int totalContents = Optional.ofNullable(enrollment.getCourse().getContents())
+                .map(List::size)
+                .orElse(0);
+
+        if (enrollment.getProgress() >= totalContents) {
             enrollment.setStatus("completed");
             enrollment.setCompletedAt(LocalDateTime.now());
 
-            enrollment.getCourse().getBadges().forEach(badge -> {
-                boolean hasBadge = enrollment.getUser().getBadges().stream()
-                        .anyMatch(ub -> ub.getBadge().getBadgeId().equals(badge.getBadgeId()));
+            List<Badge> courseBadges = enrollment.getCourse().getBadges();
 
-                if (!hasBadge) {
-                    userBadgeRepository.save(UserBadge.builder()
-                            .user(enrollment.getUser())
-                            .badge(badge)
-                            .build());
-                }
-            });
+            if (courseBadges != null) {
+                courseBadges.forEach(badge -> {
+                    boolean hasBadge = enrollment.getUser().getBadges() != null &&
+                            enrollment.getUser().getBadges().stream()
+                                    .anyMatch(ub -> ub.getBadge().getBadgeId().equals(badge.getBadgeId()));
+
+                    if (!hasBadge) {
+                        userBadgeRepository.save(UserBadge.builder()
+                                .user(enrollment.getUser())
+                                .badge(badge)
+                                .build());
+                    }
+                });
+            }
         }
 
         return enrollmentRepository.save(enrollment);

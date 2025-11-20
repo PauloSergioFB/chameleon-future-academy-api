@@ -3,6 +3,7 @@ package br.com.fiap.chameleonfutureacademy.presentation.transferObjects.Enrollme
 import br.com.fiap.chameleonfutureacademy.domainmodel.Course;
 import br.com.fiap.chameleonfutureacademy.domainmodel.Enrollment;
 import br.com.fiap.chameleonfutureacademy.domainmodel.User;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
@@ -24,6 +25,9 @@ public class CreateEnrollmentDTO {
     @Positive(message = "O ID do curso deve ser um número positivo")
     private Long courseId;
 
+    @Min(value = 0, message = "O progresso não pode ser negativo")
+    private Integer progress;
+
     @NotNull(message = "O status não pode estar em branco")
     @Size(max = 15, message = "O status deve ter no máximo 15 caracteres")
     @Pattern(regexp = "^(in progress|completed|suspended)$", message = "O status deve ser 'in progress', 'completed' ou 'suspended'")
@@ -36,6 +40,7 @@ public class CreateEnrollmentDTO {
         return Enrollment.builder()
                 .user(User.builder().userId(dto.getUserId()).build())
                 .course(Course.builder().courseId(dto.getCourseId()).build())
+                .progress(dto.getProgress() != null ? dto.getProgress() : 0)
                 .status(dto.getStatus())
                 .build();
     }
