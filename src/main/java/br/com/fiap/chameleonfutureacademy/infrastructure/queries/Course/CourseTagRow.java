@@ -5,9 +5,14 @@ import java.time.LocalDateTime;
 public record CourseTagRow(
         Long courseId,
         String title,
+        String description,
         String author,
         String thumbnailUrl,
         LocalDateTime createdAt,
+
         Long tagId,
-        String tagDescription) {
+        String tagDescription,
+
+        Long totalContents) {
+
 }

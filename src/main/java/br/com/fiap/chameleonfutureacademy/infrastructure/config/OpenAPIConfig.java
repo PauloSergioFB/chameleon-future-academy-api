@@ -31,13 +31,8 @@ public class OpenAPIConfig {
                 new Info()
                         .title("Chameleon Future Academy API")
                         .version("1.0.0")
-                        .description("""
-                                A Chameleon Future Academy é uma plataforma de desenvolvimento educacional
-                                voltada para capacitar profissionais para os desafios do futuro.
-                                O sistema permite que usuários realizem cursos, acompanhem seu progresso,
-                                obtenham badges e construam um perfil acadêmico dinâmico que reflete suas
-                                habilidades e conquistas.
-                                """));
+                        .description(
+                                "API responsável por gerenciar os recursos da plataforma Chameleon Future Academy, incluindo autenticação, usuários, cursos, matrículas, conteúdos, tags e badges."));
     }
 
 }

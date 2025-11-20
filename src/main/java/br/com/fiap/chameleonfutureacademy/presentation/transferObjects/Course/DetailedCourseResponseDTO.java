@@ -23,6 +23,7 @@ public record DetailedCourseResponseDTO(
         LocalDateTime createdAt,
         List<TagResponseDTO> tags,
         List<BadgeResponseDTO> badges,
+        Integer totalContents,
         List<ContentResponseDTO> contents) {
 
     public static DetailedCourseResponseDTO from(Course course) {
@@ -42,6 +43,9 @@ public record DetailedCourseResponseDTO(
                 .badges(course.getBadges() != null
                         ? course.getBadges().stream().map(BadgeResponseDTO::from).toList()
                         : new ArrayList<>())
+                .totalContents(course.getContents() != null
+                        ? course.getContents().size()
+                        : 0)
                 .contents(course.getContents() != null
                         ? course.getContents().stream().map(ContentResponseDTO::from).toList()
                         : new ArrayList<>())
@@ -103,6 +107,7 @@ public record DetailedCourseResponseDTO(
                 course.createdAt(),
                 tags,
                 badges,
+                contents.size(),
                 contents);
     }
 

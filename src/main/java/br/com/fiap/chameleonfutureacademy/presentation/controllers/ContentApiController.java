@@ -21,13 +21,13 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/contents")
-@Tag(name = "Conteúdos", description = "Endpoints para consulta de conteúdos específicos de um curso, incluindo lições e atividades.")
+@Tag(name = "Conteúdos", description = "Endpoints para consulta dos conteúdos vinculados aos cursos.")
 public class ContentApiController {
 
     private final LessonService<Lesson, Long> lessonService;
     private final ActivityService<Activity, Long> activityService;
 
-    @Operation(summary = "Buscar aula do conteúdo", description = "Retorna a aula associada ao conteúdo informado pelo seu identificador.")
+    @Operation(summary = "Obter aula de um conteúdo", description = "Retorna a aula associada ao conteúdo identificado pelo ID.")
     @GetMapping("/{id}/lesson")
     public ResponseEntity<LessonResponseDTO> findLesson(@PathVariable Long contentId) {
 
@@ -36,7 +36,7 @@ public class ContentApiController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "Buscar atividade do conteúdo", description = "Retorna a atividade associada ao conteúdo informado pelo seu identificador.")
+    @Operation(summary = "Obter atividade de um conteúdo", description = "Retorna a atividade associada ao conteúdo identificado pelo ID.")
     @GetMapping("/{id}/activity")
     public ResponseEntity<ActivityResponseDTO> findActivity(@PathVariable Long contentId) {
 

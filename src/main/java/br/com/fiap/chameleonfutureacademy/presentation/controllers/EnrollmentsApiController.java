@@ -27,12 +27,12 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/enrollments")
-@Tag(name = "Matrículas", description = "Endpoints para gerenciamento de matrículas dos usuários em cursos, incluindo criação, atualização e remoção.")
+@Tag(name = "Matrículas", description = "Endpoints para criação, atualização e remoção de matrículas de usuários.")
 public class EnrollmentsApiController {
 
     private final EnrollmentService<Enrollment, Long> enrollmentService;
 
-    @Operation(summary = "Registrar nova matrícula", description = "Cria uma nova matrícula associando um usuário a um curso. Este endpoint deve ser utilizado quando um aluno inicia sua participação em um curso.")
+    @Operation(summary = "Criar uma nova matrícula", description = "Registra uma nova matrícula para o usuário autenticado com base nos dados informados.")
     @PostMapping
     public ResponseEntity<EnrollmentResponseDTO> save(
             @Valid @RequestBody CreateEnrollmentDTO createEnrollmentDTO,
@@ -46,7 +46,7 @@ public class EnrollmentsApiController {
         return new ResponseEntity<>(EnrollmentResponseDTO.from(newEnrollment), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Atualizar matrícula existente", description = "Atualiza completamente os dados de uma matrícula já registrada, permitindo alterar progresso, status ou curso associado.")
+    @Operation(summary = "Atualizar uma matrícula existente", description = "Atualiza os dados de uma matrícula específica pertencente ao usuário autenticado.")
     @PutMapping("/{id}")
     public ResponseEntity<EnrollmentResponseDTO> update(
             @PathVariable Long id,
@@ -64,7 +64,7 @@ public class EnrollmentsApiController {
         return ResponseEntity.ok(EnrollmentResponseDTO.from(updatedEnrollment));
     }
 
-    @Operation(summary = "Excluir matrícula", description = "Remove definitivamente uma matrícula do sistema, encerrando a participação do usuário em um curso.")
+    @Operation(summary = "Excluir uma matrícula", description = "Remove uma matrícula específica pertencente ao usuário autenticado.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id, @AuthenticationPrincipal JwtUserData authUser) {
 

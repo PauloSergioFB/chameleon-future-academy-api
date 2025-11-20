@@ -35,13 +35,13 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/users")
-@Tag(name = "Usuários", description = "Endpoints para gerenciamento de usuários, incluindo criação, consulta, atualização e exclusão.")
+@Tag(name = "Usuários", description = "Endpoints dedicados ao gerenciamento de contas de usuário: acesso ao perfil, matrículas, badges e operações de criação, atualização e remoção.")
 public class UserApiController {
 
     private final UserService<User, Long> userService;
     private final EnrollmentService<Enrollment, Long> enrollmentService;
 
-    @Operation(summary = "Obter dados do usuário autenticado", description = "Retorna as informações completas do usuário atualmente autenticado.")
+    @Operation(summary = "Obter dados do usuário autenticado", description = "Retorna as informações completas do usuário atualmente autenticado com base no token JWT fornecido.")
     @GetMapping("/me")
     public ResponseEntity<UserResponseDTO> find(@AuthenticationPrincipal JwtUserData authUser) {
         return userService.findById(authUser.userId())
@@ -49,7 +49,7 @@ public class UserApiController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "Listar cursos inscritos", description = "Retorna todos os cursos nos quais o usuário autenticado está inscrito, incluindo informações como progresso, status e datas de início e conclusão.")
+    @Operation(summary = "Listar inscrições do usuário autenticado", description = "Retorna todos os cursos nos quais o usuário autenticado está matriculado.")
     @GetMapping("/me/enrollments")
     public ResponseEntity<List<EnrollmentResponseDTO>> findEnrollments(
             @AuthenticationPrincipal JwtUserData authUser) {
@@ -60,7 +60,7 @@ public class UserApiController {
                 .toList());
     }
 
-    @Operation(summary = "Listar badges do usuário", description = "Retorna todas as badges conquistadas pelo usuário autenticado, incluindo título, ícone e informações de associação com cursos.")
+    @Operation(summary = "Listar badges do usuário autenticado", description = "Retorna todas as badges conquistadas pelo usuário autenticado ao longo dos cursos realizados.")
     @GetMapping("/me/badges")
     public ResponseEntity<List<BadgeResponseDTO>> findBadges(@AuthenticationPrincipal JwtUserData authUser) {
         return userService.findById(authUser.userId())
@@ -68,7 +68,7 @@ public class UserApiController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "Obter perfil completo do usuário", description = "Retorna o perfil completo do usuário autenticado, incluindo dados pessoais, cursos inscritos, badges conquistadas e demais informações associadas ao seu progresso na plataforma.")
+    @Operation(summary = "Obter perfil detalhado do usuário", description = "Retorna um resumo completo do perfil do usuário autenticado, incluindo dados complementares que não fazem parte do retorno padrão.")
     @GetMapping("/me/profile")
     public ResponseEntity<UserProfileResponseDTO> findProfile(@AuthenticationPrincipal JwtUserData authUser) {
         return userService.findProfileById(authUser.userId())
@@ -76,14 +76,14 @@ public class UserApiController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "Cadastrar novo usuário", description = "Cria um novo usuário no sistema a partir dos dados fornecidos.")
+    @Operation(summary = "Criar um novo usuário", description = "Cria um novo usuário no sistema com os dados informados e retorna as informações do usuário registrado.")
     @PostMapping
     public ResponseEntity<UserResponseDTO> save(@Valid @RequestBody CreateUserDTO createUserDTO) {
         User newUser = userService.create(CreateUserDTO.to(createUserDTO));
         return new ResponseEntity<>(UserResponseDTO.from(newUser), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Atualizar usuário existente", description = "Atualiza integralmente as informações de um usuário já registrado, identificado pelo seu ID.")
+    @Operation(summary = "Atualizar usuário existente", description = "Atualiza todas as informações do usuário identificado pelo ID informado. Apenas o próprio usuário pode atualizar o seu próprio registro.")
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDTO> update(
             @PathVariable Long id,
@@ -101,7 +101,7 @@ public class UserApiController {
         return ResponseEntity.ok(UserResponseDTO.from(updatedUser));
     }
 
-    @Operation(summary = "Excluir usuário", description = "Remove definitivamente um usuário do sistema com base no seu ID.")
+    @Operation(summary = "Remover usuário existente", description = "Remove permanentemente o usuário identificado pelo ID informado. Apenas o próprio usuário pode excluir sua própria conta.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id, @AuthenticationPrincipal JwtUserData authUser) {
         if (!id.equals(authUser.userId()))

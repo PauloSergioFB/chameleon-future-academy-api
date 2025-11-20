@@ -20,12 +20,12 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/tags")
-@io.swagger.v3.oas.annotations.tags.Tag(name = "Tags", description = "Operações de listagem de tags")
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Tags", description = "Endpoints para listagem das tags utilizadas nos cursos.")
 public class TagApiController {
 
     private final TagService<Tag, Long> tagService;
 
-    @Operation(summary = "Listar todas as tags", description = "Retorna uma lista paginada de tags.")
+    @Operation(summary = "Listar todas as tags", description = "Retorna uma lista paginada de todas as tags cadastradas, permitindo ordenação e filtragem por página.")
     @GetMapping
     public ResponseEntity<PageResponse<TagResponseDTO>> findAll(
             @RequestParam(defaultValue = "0") Integer page,

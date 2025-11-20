@@ -19,7 +19,8 @@ public record CourseResponseDTO(
         String author,
         String thumbnailUrl,
         LocalDateTime createdAt,
-        List<TagResponseDTO> tags) {
+        List<TagResponseDTO> tags,
+        Integer totalContents) {
 
     public static CourseResponseDTO from(Course course) {
         if (course == null)
@@ -35,20 +36,25 @@ public record CourseResponseDTO(
                 .tags(course.getTags() != null
                         ? course.getTags().stream().map(TagResponseDTO::from).toList()
                         : new ArrayList<>())
+                .totalContents(course.getContents() != null
+                        ? course.getContents().size()
+                        : 0)
                 .build();
     }
 
-    public static CourseResponseDTO from(CourseTagRow course) {
-        if (course == null)
+    public static CourseResponseDTO from(CourseTagRow row) {
+        if (row == null)
             return null;
 
         return CourseResponseDTO.builder()
-                .courseId(course.courseId())
-                .title(course.title())
-                .author(course.author())
-                .thumbnailUrl(course.thumbnailUrl())
-                .createdAt(course.createdAt())
+                .courseId(row.courseId())
+                .title(row.title())
+                .description(row.description())
+                .author(row.author())
+                .thumbnailUrl(row.thumbnailUrl())
+                .createdAt(row.createdAt())
                 .tags(new ArrayList<>())
+                .totalContents(row.totalContents().intValue())
                 .build();
     }
 

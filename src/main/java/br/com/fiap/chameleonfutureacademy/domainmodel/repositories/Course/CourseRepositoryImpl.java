@@ -155,6 +155,7 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom {
 
         QCourse qCourse = QCourse.course;
         QTag qTag = QTag.tag;
+        QContent qContent = QContent.content;
 
         Pageable pageable = PageRequest.of(page, size);
 
@@ -174,14 +175,26 @@ public class CourseRepositoryImpl implements CourseRepositoryCustom {
                         CourseTagRow.class,
                         qCourse.courseId,
                         qCourse.title,
+                        qCourse.description,
                         qCourse.author,
                         qCourse.thumbnailUrl,
                         qCourse.createdAt,
                         qTag.tagId,
-                        qTag.description))
+                        qTag.description,
+                        qContent.contentId.count()))
                 .from(qCourse)
                 .leftJoin(qCourse.tags, qTag)
+                .leftJoin(qCourse.contents, qContent)
                 .where(qCourse.courseId.in(ids))
+                .groupBy(
+                        qCourse.courseId,
+                        qCourse.title,
+                        qCourse.description,
+                        qCourse.author,
+                        qCourse.thumbnailUrl,
+                        qCourse.createdAt,
+                        qTag.tagId,
+                        qTag.description)
                 .orderBy(order)
                 .fetch();
 

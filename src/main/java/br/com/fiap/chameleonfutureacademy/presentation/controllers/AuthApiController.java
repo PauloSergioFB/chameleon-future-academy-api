@@ -29,13 +29,13 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
-@Tag(name = "Autenticação", description = "Endpoints responsáveis por autenticação e renovação de tokens JWT.")
+@Tag(name = "Autenticação", description = "Endpoints para autenticação de usuários e renovação de tokens JWT.")
 public class AuthApiController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtHelper jwtHelper;
 
-    @Operation(summary = "Login", description = "Autentica usuário e retorna access token + refresh token.")
+    @Operation(summary = "Realizar login", description = "Autentica o usuário com e-mail e senha e retorna um token JWT e um refresh token.")
     @PostMapping
     public ResponseEntity<AuthResponseDTO> login(@Valid @RequestBody AuthRequestDTO request) {
 
@@ -49,7 +49,7 @@ public class AuthApiController {
         return ResponseEntity.ok(new AuthResponseDTO(token, refreshToken));
     }
 
-    @Operation(summary = "Renovar Token", description = "Gera novos tokens a partir de um refresh token válido.")
+    @Operation(summary = "Renovar token de acesso", description = "Valida o refresh token enviado e retorna um novo token JWT e um novo refresh token.")
     @PostMapping("/refresh")
     public ResponseEntity<AuthResponseDTO> login(@RequestBody RefreshTokenRequestDTO request) {
 
