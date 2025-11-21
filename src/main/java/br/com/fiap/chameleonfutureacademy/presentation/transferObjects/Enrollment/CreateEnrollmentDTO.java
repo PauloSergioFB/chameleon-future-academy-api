@@ -32,7 +32,7 @@ public class CreateEnrollmentDTO {
     @Pattern(regexp = "^(in progress|completed|suspended)$", message = "O status deve ser 'in progress', 'completed' ou 'suspended'")
     private String status;
 
-    public static Enrollment to(CreateEnrollmentDTO dto) {
+    public static Enrollment toEntity(CreateEnrollmentDTO dto) {
         if (dto == null)
             return null;
 

@@ -37,7 +37,7 @@ public class CreateUserDTO {
     @Size(max = 100, message = "A URL da foto de perfil deve ter no máximo 100 caracteres")
     private String profileImage;
 
-    public static User to(CreateUserDTO dto) {
+    public static User toEntity(CreateUserDTO dto) {
         if (dto == null)
             return null;
 

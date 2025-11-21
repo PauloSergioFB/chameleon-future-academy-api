@@ -42,7 +42,7 @@ public class EnrollmentsApiController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
                     "Você só pode adicionar matriculas ao seu próprio usuário.");
 
-        Enrollment newEnrollment = enrollmentService.create(CreateEnrollmentDTO.to(createEnrollmentDTO));
+        Enrollment newEnrollment = enrollmentService.create(CreateEnrollmentDTO.toEntity(createEnrollmentDTO));
         return new ResponseEntity<>(EnrollmentResponseDTO.from(newEnrollment), HttpStatus.CREATED);
     }
 
@@ -57,7 +57,7 @@ public class EnrollmentsApiController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
                     "Você só pode alterar suas próprias matriculas.");
 
-        Enrollment enrollment = CreateEnrollmentDTO.to(createEnrollmentDTO);
+        Enrollment enrollment = CreateEnrollmentDTO.toEntity(createEnrollmentDTO);
         enrollment.setEnrollmentId(id);
 
         Enrollment updatedEnrollment = enrollmentService.update(enrollment);

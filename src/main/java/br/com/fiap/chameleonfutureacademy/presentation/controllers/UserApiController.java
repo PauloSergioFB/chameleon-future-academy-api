@@ -79,7 +79,7 @@ public class UserApiController {
     @Operation(summary = "Criar um novo usuário", description = "Cria um novo usuário no sistema com os dados informados e retorna as informações do usuário registrado.")
     @PostMapping
     public ResponseEntity<UserResponseDTO> save(@Valid @RequestBody CreateUserDTO createUserDTO) {
-        User newUser = userService.create(CreateUserDTO.to(createUserDTO));
+        User newUser = userService.create(CreateUserDTO.toEntity(createUserDTO));
         return new ResponseEntity<>(UserResponseDTO.from(newUser), HttpStatus.CREATED);
     }
 
@@ -94,7 +94,7 @@ public class UserApiController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
                     "Você só pode alterar o seu próprio usuário.");
 
-        User user = CreateUserDTO.to(createUserDTO);
+        User user = CreateUserDTO.toEntity(createUserDTO);
         user.setUserId(id);
 
         User updatedUser = userService.update(user);
