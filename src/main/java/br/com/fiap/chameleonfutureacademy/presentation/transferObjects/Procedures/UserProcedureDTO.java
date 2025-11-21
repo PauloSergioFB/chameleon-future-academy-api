@@ -10,7 +10,7 @@ public record UserProcedureDTO(
         String whatsapp,
         String profileImage) {
 
-    public static User to(UserProcedureDTO dto) {
+    public static User toEntity(UserProcedureDTO dto) {
         if (dto == null)
             return null;
 
@@ -23,4 +23,5 @@ public record UserProcedureDTO(
                 .profileImage(dto.profileImage())
                 .build();
     }
+
 }
