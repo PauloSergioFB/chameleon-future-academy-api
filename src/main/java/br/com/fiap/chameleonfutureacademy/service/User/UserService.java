@@ -12,6 +12,8 @@ public interface UserService<T, ID> {
 
     public T create(T o);
 
+    public void prc_create(T o);
+
     public T update(T o);
 
     public void removeById(ID id);

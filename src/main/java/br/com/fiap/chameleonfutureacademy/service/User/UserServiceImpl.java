@@ -45,6 +45,23 @@ public class UserServiceImpl implements UserService<User, Long> {
     }
 
     @Override
+    public void prc_create(User user) {
+        try {
+            user.setHashedPassword(passwordEncoder.encode(user.getHashedPassword()));
+            userRepository.prcSave(
+                    user.getFullName(),
+                    user.getEmail(),
+                    user.getHashedPassword(),
+                    user.getBiography(),
+                    user.getWhatsapp(),
+                    user.getProfileImage());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
     public User update(User user) {
         if (existsById(user.getUserId()))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado");
