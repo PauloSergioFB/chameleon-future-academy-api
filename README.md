@@ -31,8 +31,8 @@ A aplicação permite criar e gerenciar contas de usuário, consultar cursos, ac
 
 A API está disponível publicamente em:  
 
-**Endpoint da API:** [http://paulosergiofb:8080](http://paulosergiofb:8080)  
-**Documentação Swagger:** [http://paulosergiofb:8080/swagger-ui/index.html](http://paulosergiofb:8080/swagger-ui/index.html)
+**Endpoint da API:** [http://paulosergiofb.com.br:8080](http://paulosergiofb:8080)  
+**Documentação Swagger:** [http://paulosergiofb.com.br:8080/swagger-ui/index.html](http://paulosergiofb:8080/swagger-ui/index.html)
 
 ## Endpoints
 
