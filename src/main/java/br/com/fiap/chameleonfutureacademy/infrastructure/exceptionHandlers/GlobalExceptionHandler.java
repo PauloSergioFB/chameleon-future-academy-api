@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,6 +20,12 @@ import br.com.fiap.chameleonfutureacademy.domainmodel.exceptions.FieldValidation
 public class GlobalExceptionHandler {
 
     private final PropertyNamingStrategies.SnakeCaseStrategy snakeCaseStrategy = new PropertyNamingStrategies.SnakeCaseStrategy();
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Map<String, String>> handleBadCredentials() {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("error", "Usuário inexistente ou senha inválida"));
+    }
 
     @ExceptionHandler(FieldValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
