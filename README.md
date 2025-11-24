@@ -19,13 +19,11 @@ A aplicação permite criar e gerenciar contas de usuário, consultar cursos, ac
 
 ## Vídeo Pitch
 
-<!-- TODO: Inserir vídeo aqui -->
-**Assista no YouTube:** [https://youtu.be/](https://youtu.be/)
+**Assista no YouTube:** [https://youtu.be/jwT6pl8h4AI](https://youtu.be/jwT6pl8h4AI)
 
 ## Demonstração da Solução
 
-<!-- TODO: Inserir vídeo aqui -->
-**Assista no YouTube:** [https://youtu.be/](https://youtu.be/)
+**Assista no YouTube:** [https://youtu.be/_XM47GfITTA](https://youtu.be/_XM47GfITTA)
 
 ## Deploy
 
